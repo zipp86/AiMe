@@ -1,0 +1,14 @@
+plaintext
+Click
+pyttsx3
+SpeechRecognition
+pydub
+wget
+beautifulsoup4
+lxml
+gTTS
+youtube_dl
+psutil
+sqlite3
+inspect
+ast

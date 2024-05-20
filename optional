@@ -1,0 +1,30 @@
+//#if you prefer to install it from source then youll want to create a directory for AiMe AI assistant by, using/
+ppmkdir ~/AiMe
+  
+//#Change to the newly created directory, using/
+cd ~/AiMe
+
+//#Copy the requirements.txt file to the Chromebook, using/
+scp requirements.txt user@your_chromebook_ip_address:/path/to/AiMe
+
+//#SSH into your Chromebook, using/
+ssh user@your_chromebook_ip_address
+
+//#Install AiMe requirements.txt file by using/
+sudo pip3 install -r /path/to/requirements.txt
+
+//#Install the desktop file for the AiMe AI assistant then move the package to device launcher if you prefer access outside of the terminal using/
+sudo mv /path/to/ai-me.desktop /usr/share/applications/
+
+//#Create a shell script to start the AiMe AI assistant,using/
+echo '#!/bin/bash
+python3 /path/to/AiMe/AiMe.py' > /usr/local/bin/AiMe
+
+
+//#Give the AiMe.py root access by running/ 
+sudo chmod +x /usr/local/bin/AiMe
+
+//#Now, you should be able to run the AiMe AI assistant from the terminal with/
+AiMe
+
+#Or you should be able to find it in your home launcher with the other Chromebook Apps and run it from there for faster launch!!! 

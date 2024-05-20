@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=AiMe
+Comment=A world-class AI Assistant for Chromebooks.
+Exec=/usr/local/bin/AiMe
+Icon=/path/to/icon.png
+Terminal=false
+Type=Application
+StartupNotify=false

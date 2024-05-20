@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "python-template"
+version = "0.1.0"
+description = ""
+authors = ["L. Matthew Solomon III <solomonsremodeling9@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.10.0,<3.12"
+click = "8.1.7"
+pyttsx3 = "2.90"
+speechrecognition = "3.10.4"
+pydub = "0.25.1"
+wget = "3.2"
+python3-wget = "0.0.2-beta1"
+beautifulsoup4 = "4.12.3"
+beautifulsoup4-helpers = "0.0.1"
+lxml = "5.2.2"
+lxml2pandas = "0.16"
+gtts = "2.5.1"
+youtube-dl = "2021.12.17"
+youtube-dl-cli = "0.1.2"
+psutil = "5.9.8"
+psutil-wheels = "5.8.0"
+psutil-home-assistant = "0.0.1"
+sqlite3-0611 = "0.0.1"
+ai4sqlite3 = "0.1.0"
+inspect2 = "0.1.2"
+sqla-inspect = "0.7.6"
+inspect313 = "0.1.0"
+ast2call = "0.1.0"
+ast-decompiler = "0.8.0"
+ast-magic = "1.0.1"
+
+[tool.pyright]
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+useLibraryCodeForTypes = true
+exclude = [".cache"]
+
+[tool.ruff]
+# https://beta.ruff.rs/docs/configuration/
+select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
+ignore = ['W291', 'W292', 'W293']
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

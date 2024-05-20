@@ -17,3 +17,5 @@ Generating code based on a given query
 To install AiMe, you can run the following command:
 
 pip install AiMe
+
+or if you prefer to launch it from your terminal please see (optional) for step by step instructions!!!

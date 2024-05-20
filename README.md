@@ -1,5 +1,5 @@
 AiMe
-An AI assistant No-API.key requirements with device integration for chromebooks!!! AiMe is a world-class AI Assistant for Chromebooks. It is designed to be simple and efficient, without the need for API.key's for its functionality while still offering a wide range of functions, such as:
+An AI assistant built in python with device integration for chromebooks!!! AiMe is a world-class AI Assistant for Chromebooks that is designed to be simple and efficient, without the need for API.key's for its functionality by utilizing the available device resources (e.g web access , +) while still offering a wide range of functions, such as:
 
 Getting the current weather
 Checking the time

@@ -1,4 +1,3 @@
-plaintext
 Click
 pyttsx3
 SpeechRecognition

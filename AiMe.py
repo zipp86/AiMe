@@ -14,12 +14,19 @@ import subprocess
 import ast
 import inspect
 import codeop
+from llama_index import SimpleDirectoryReader, GPTSimpleVectorIndex
 
 # Initialize the text-to-speech engine
 engine = pyttsx3.init()
 
 # Set the voice rate
 engine.setProperty('rate', 150)
+
+# Load the documents from a directory
+documents = SimpleDirectoryReader('path/to/your/documents').load_data()
+
+# Create a LLAMA index
+index = GPTSimpleVectorIndex(documents)
 
 def speak(text):
     engine.say(text)
@@ -112,18 +119,17 @@ subprocess.call(["sudo", "python3", "setup.py", "install"])
         speak("AiMe is already up-to-date.")
 
 def get_information(topic):
-    # Here you would add the code to access the information and skill storage system
-    conn = sqlite3.connect("knowledge_base.db")
-    cursor = conn.cursor()
-    query = f"SELECT * FROM knowledge_base WHERE topic='{topic}'"
-    cursor.execute(query)
-    result = cursor.fetchone()
-    if result:
-        speak(result[1])
+    # Here you would add the code to access the information and skill storage system using LLAMA
+    try:
+    response = index.query(f"Tell me about {topic}")
+    if response:
+        speak(response)
     else:
         speak("Sorry, I don't have any information about that topic.")
-    conn.close()
-
+except Exception as e:
+    speak("Sorry, I encountered an error while processing your request.")
+    print(e)
+       
 def examine_code(code):
     try:
         ast.parse(code)

@@ -16,6 +16,6 @@ Examining code for syntax errors
 Generating code based on a given query
 To install AiMe, you can run the following command:
 
-pip install AiMe
+pip install aime
 
-or if you prefer to launch it from your terminal please see (optional) for step by step instructions!!!
+or if you prefer to launch it from your terminal please see (optional) there are errors installing it this way so i will update the optional file soon once iv resolved the installation errors, but feel free to clone the repo and modify or make corrections as needed if youd like... 

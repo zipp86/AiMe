@@ -109,109 +109,141 @@ def self_upgrade():
         # Unzip the downloaded file
         with zipfile.ZipFile(filename, "r") as zip_ref:
             zip_ref.extractall()
-        # Install the new version
-subprocess.call(["sudo", "python3", "setup.py", "install"])
-        # Remove the downloaded file
+        # Delete the downloaded zip file
         os.remove(filename)
-        os.remove("AiMe.zip")
-        speak("AiMe has been upgraded to the latest version.")
+        # Upgrade completed
+        speak("Your AiMe system has been upgraded to the latest version.")
     else:
-        speak("AiMe is already up-to-date.")
+        speak("Your AiMe system is already up to date.")
 
-def get_information(topic):
-    # Here you would add the code to access the information and skill storage system using LLAMA
+def launch_application(application):
     try:
-    response = index.query(f"Tell me about {topic}")
-    if response:
-        speak(response)
-    else:
-        speak("Sorry, I don't have any information about that topic.")
-except Exception as e:
-    speak("Sorry, I encountered an error while processing your request.")
-    print(e)
-       
-def examine_code(code):
+        os.startfile(application)
+    except:
+        speak("Sorry, I couldn't find that application.")
+
+def exit_system():
+    os.system('shutdown /s /t 1')
+
+def help_commands():
+    commands = [
+        "Download file",
+        "Open file",
+        "System update",
+        "System shutdown",
+        "Network scan",
+        "Execute command",
+        "Self upgrade",
+        "Launch application",
+        "Help commands",
+        "Exit system"
+    ]
+    for command in commands:
+        print(command)
+
+def get_system_info():
+    system_info = psutil.get_system_info()
+    speak(f"You are using a {system_info.system} operating system on a {system_info.machine} machine.")
+
+def get_disk_info():
+    disk_info = psutil.disk_usage('/')
+    speak(f"You have {disk_info.percent} percent disk usage. {disk_info.free} bytes of disk space is free out of {disk_info.total} bytes total.")
+
+def search_documents(query):
+    results = index.search(query)
+    for result in results:
+        print(result.id)
+        print(result.vector)
+        print(result.data)
+
+def find_word_synonyms(word):
     try:
-        ast.parse(code)
-        speak("The code is syntactically correct.")
-    except Exception as e:
-        speak("The code is syntactically incorrect.")
+        synonyms = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}").json()
+        print(synonyms[0]['meanings'][0]['synonyms'])
+    except:
+        speak("Sorry, I couldn't find any synonyms for that word.")
 
-def generate_code(language, query):
-    if language == "python":
-        try:
-            result = eval(query)
-            code = inspect.getsource(result)
-            speak("Here is the generated code:")
-            speak(code)
-        except Exception as e:
-            speak("Sorry, I couldn't generate the code for that query.")
+def search_documents_synonyms(word):
+    results = []
+    for document in documents:
+        if word in document.split():
+            results.append(document)
+    if results:
+        speak("I found the following documents containing synonyms for that word:")
+        for result in results:
+            print(result)
     else:
-        speak("Sorry, I can only generate Python code at the moment.")
+        speak("I couldn't find any documents containing synonyms for that word.")
 
-def AiMe():
-    # Check for updates
-    self_upgrade()
-    # Start the AiMe AI assistant
-    speak("Hello, I'm AiMe, a world-class AI Assistant. How can I assist you today?")
-    query = listen().lower()
-
-    if 'weather' in query:
-        location = query.replace("what's the weather in", "").strip()
-        get_weather(location)
-
-    elif 'time' in query:
+def process_query(query):
+    # Lowercase the query for case insensitivity
+    query = query.lower()
+    # Search the LLAMA index for documents containing the query
+    search_results = search_documents(query)
+    # Search the LLAMA index for documents containing synonyms for the query
+    search_synonyms_results = search_documents_synonyms(query)
+    # Search for the weather in a given location
+    if re.match(r"weather", query):
+        get_weather(query.split(" ")[1])
+    # Search for the current time
+    elif re.match(r"time", query):
         get_time()
-
-    elif 'search' in query:
-        query = query.replace("search for", "").strip()
-        search_web(query)
-
-    elif 'download' in query:
-        query = query.replace("download", "").strip()
-        url = query
-        download_file(url)
-
-    elif 'file' in query and 'open' in query:
-        query = query.replace("open", "").strip()
-        filepath = query
-        open_file(filepath)
-
-    elif 'system update' in query:
+    # Search the web for the query
+    elif re.match(r"search web", query):
+        search_web(query.split(" ")[2])
+    # Download a file from a given URL
+    elif re.match(r"download file", query):
+        download_file(query.split(" ")[2])
+    # Open a file at a given filepath
+    elif re.match(r"open file", query):
+        open_file(query.split(" ")[2])
+    # Update the system software
+    elif re.match(r"system update", query):
         system_update()
-
-    elif 'shutdown' in query:
+    # Shutdown the system
+    elif re.match(r"system shutdown", query):
         system_shutdown()
-
-    elif 'scan network' in query:
+    # Scan the network for active devices
+    elif re.match(r"network scan", query):
         network_scan()
-
-    elif 'run' in query:
-        query = query.replace("run", "").strip()
-        command = query
-        execute_command(command)
-
-    elif 'upgrade' in query:
+    # Execute a command in the system terminal
+    elif re.match(r"execute command", query):
+        execute_command(query.split(" ")[2])
+    # Upgrade AiMe to the latest version
+    elif re.match(r"self upgrade", query):
         self_upgrade()
+    # Launch an application from the system
+    elif re.match(r"launch application", query):
+        launch_application(query.split(" ")[2])
+    # Print a list of all commands
+    elif re.match(r"help commands", query):
+        help_commands()
+    # Exit the AiMe system
+    elif re.match(r"exit system", query):
+        exit_system()
+    # Get system information
+    elif re.match(r"system info", query):
+        get_system_info()
+    # Get disk information
+    elif re.match(r"disk info", query):
+        get_disk_info()
+    # Search for synonyms for a given word
+    elif re.match(r"find word synonyms", query):
+        find_word_synonyms(query.split(" ")[2])
 
-    elif 'information' in query:
-        topic = query.replace("get information about", "").strip()
-        get_information(topic)
-
-    elif 'examine' in query and 'code' in query:
-        query = query.replace("examine", "").strip()
-        code = query
-        examine_code(code)
-
-    elif 'generate' in query and 'code' in query:
-        query = query.replace("generate", "").strip()
-        language, query = query.split("for")
-        language = language.strip()
-        query = query.strip()
-        generate_code(language, query)
-
-    else:
-        speak("Sorry, I couldn't understand that command. Can you please repeat?")
-        AiMe()
-
-AiMe()
+# Start the AiMe system
+if __name__ == "__main__":
+    print("Welcome to AiMe. Type 'exit system' to quit.")
+    while True:
+        try:
+            query = input("What can I help you with? ")
+            if query == "exit system":
+                break
+            process_query(query)
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            print("An error occurred:", str(e))
+            break
+    speak("Goodbye!")
+    exit_system()

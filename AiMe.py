@@ -107,7 +107,7 @@ def self_upgrade():
         filename = "AiMe.zip"
         wget.download(url, filename)
         # Unzip the downloaded file
-        with zipfile.ZipFile(filename, "r") as zip_ref:
+        with zipfile.ZipFile(filename, "r") aszip_ref:
             zip_ref.extractall()
         # Delete the downloaded zip file
         os.remove(filename)
